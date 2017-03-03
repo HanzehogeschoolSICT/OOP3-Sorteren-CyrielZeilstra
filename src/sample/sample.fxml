@@ -12,8 +12,8 @@
       <VBox fx:id="mainVBox" prefHeight="200" prefWidth="200" spacing="5.0" />
       <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="1">
         <buttons>
-          <Button mnemonicParsing="false" text="Skip" />
-            <Button mnemonicParsing="false" text="Button" />
+          <Button mnemonicParsing="false" fx:id="stepBtn" text="Step" />
+            <Button mnemonicParsing="false"  fx:id="sortBtn" text="Sort" />
         </buttons>
       </ButtonBar>
    </children>
