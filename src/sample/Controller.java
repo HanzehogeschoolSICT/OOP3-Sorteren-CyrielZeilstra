@@ -1,5 +1,8 @@
 package sample;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,6 +12,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,11 +20,17 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.*;
 
-public class Controller
-        implements Initializable {
-    int n = 25;
+public class Controller implements Initializable {
+    int n = 15;
 
-    public ArrayList generateRandomNumberlist() {
+    // Generate a random list and add them to the chart.
+    ArrayList<Integer> nums;
+    CategoryAxis xAxis = new CategoryAxis();
+    NumberAxis yAxis = new NumberAxis();
+    BarChart<String, Number> bc = new BarChart<String, Number>(xAxis, yAxis);
+    XYChart.Series series1 = new XYChart.Series();
+
+    public void generateRandomNumberlist() {
         ArrayList<Integer> nums = new ArrayList<>();
         int i = 1;
         while (nums.size() < n) {
@@ -28,29 +38,18 @@ public class Controller
             i++;
         }
         Collections.shuffle(nums);
-        return nums;
+        this.nums = nums;
     }
 
-    private void drawChart(ArrayList nus) {
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        BarChart<String, Number> bc = new BarChart<String, Number>(xAxis, yAxis);
-
-        bc.setTitle("Bubble sort");
-        bc.setCategoryGap(0);
-        bc.setBarGap(0);
-        bc.setMinSize(550, 350);
-        XYChart.Series series1 = new XYChart.Series();
-        series1.setName("Random data");
-
-        for (Object a : nus) {
-            series1.getData().add(new XYChart.Data("" + a, a));
+    private void drawChart(ArrayList num) {
+        System.out.println(num);
+        bc.getData().clear();
+        XYChart.Series series = new XYChart.Series();
+        for (Object a : num){
+            series.getData().add(new XYChart.Data("" + a, a));
         }
-
-        bc.getData().addAll(series1);
-        mainVBox.getChildren().add(bc);
+        bc.getData().add(series);
     }
-
 
     @FXML //  fx:id="mainVBox"
     private VBox mainVBox; // Value injected by FXMLLoader
@@ -63,9 +62,22 @@ public class Controller
         assert mainVBox != null : "fx:id=\"mainVBox\" was not injected: check your FXML file 'sample.fxml'.";
         assert sortBtn != null : "fx:id=\"sortBtn\" was not injected: check your FXML file 'sample.fxml'.";
 
-        // Generate a random list and add them to the chart.
-        ArrayList<Integer> nums = generateRandomNumberlist();
-        drawChart(nums);
+        generateRandomNumberlist();
+
+        bc.setTitle("Bubble sort");
+        bc.setCategoryGap(0);
+        bc.setBarGap(0);
+        bc.setMinSize(550, 350);
+        series1.setName("Random data");
+
+        for (Object a : nums) {
+            series1.getData().add(new XYChart.Data("" + a, a));
+        }
+
+        bc.getData().addAll(series1);
+        mainVBox.getChildren().add(bc);
+
+        System.out.println(nums);
 
         sortBtn.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -78,9 +90,11 @@ public class Controller
                             temp = nums.get(j - 1);
                             nums.set(j - 1, nums.get(j));
                             nums.set(j, temp);
+
                         }
                     }
                 }
+                System.out.println(nums);
                 drawChart(nums);
             }
         });
