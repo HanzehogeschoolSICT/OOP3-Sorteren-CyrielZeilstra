@@ -14,7 +14,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +31,7 @@ public class Controller implements Initializable {
     final CategoryAxis xAxis = new CategoryAxis();
     final BarChart<String, Number> bc = new BarChart<String, Number>(xAxis, yAxis);
     XYChart.Series<String, Number> series1 = new XYChart.Series();
-    String algo = "Bubble sort";
+    String algo;
 
     public Controller() {
         bc.setTitle("Algorithm : " + algo);
@@ -37,6 +39,7 @@ public class Controller implements Initializable {
         bc.setBarGap(0);
         bc.setAnimated(false);
         bc.setMinSize(550, 350);
+        bc.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
         series1.setName("Random data");
 
         generateRandomNumberlist();
@@ -74,21 +77,33 @@ public class Controller implements Initializable {
         bc.layout();
         bc.getData().add(seriesA);
     }
+    private void oneStepInsertionSort() {
+        int j;            // the number of items sorted so far
+        int key;                // the item to be inserted
+        int i;
 
-    private void oneBubbleStep() {
-        int temp = 0;
-        for (int i = 0; i < nums.size() - 1; i++) {
-            for (int j = 1; j < (nums.size() - i); j++) {
-                if (nums.get(j - 1) > nums.get(j)) {
-                    temp = nums.get(j - 1);
-                    nums.set(j - 1, nums.get(j));
-                    nums.set(j, temp);
-                }
+        for (j = 1; j < nums.size(); j++)    // Start with 1 (not 0)
+        {
+            key = nums.get(j);
+            for (i = j - 1; (i >= 0) && (nums.get(i) > key); i--)   // Smaller values are moving up
+            {
+                nums.set(i + 1, nums.get(i));
             }
+            nums.set(i + 1, key);    // Put the key in its proper location
             break;
         }
     }
 
+    private void oneStepBubbleSort() {
+        int temp = 0;
+        for (int j = 1; j < (nums.size()); j++) {
+            if (nums.get(j - 1) > nums.get(j)) {
+                temp = nums.get(j - 1);
+                nums.set(j - 1, nums.get(j));
+                nums.set(j, temp);
+            }
+        }
+    }
 
 
     public boolean isSorted() {
@@ -100,7 +115,7 @@ public class Controller implements Initializable {
         return true;
     }
 
-    public void runSortOnTimer() {
+    public void sortOnTimer(String alg) {
         String text = msTextField.getText();
         if (text.matches("[0-9]+") && text.length() > 2) {
             log("Sorting every : " + text + "ms.");
@@ -110,9 +125,19 @@ public class Controller implements Initializable {
                 public void run() {
                     Platform.runLater(new Runnable() {
                         public void run() {
-                            oneBubbleStep();
-                            updateChart();
-                            if (isSorted()){
+                            switch (alg) {
+                                case "Bubble sort":
+                                    oneStepBubbleSort();
+                                    updateChart();
+                                    break;
+                                case "Insertion sort":
+                                    log("not yet implemented.");
+                                    break;
+                                case "Quick sort":
+                                    log("not yet implemented.");
+                                    break;
+                            }
+                            if (isSorted()) {
                                 log("List is sorted. Stopping loop.");
                                 t.cancel();
                             }
@@ -163,6 +188,8 @@ public class Controller implements Initializable {
 
         algorithmSelect.setItems(options);
         algorithmSelect.setValue(options.get(0));
+        algo = options.get(0);
+        bc.setTitle("Algorithm : " + algo);
 
         algorithmSelect.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -176,15 +203,37 @@ public class Controller implements Initializable {
         stepBtn.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
-                oneBubbleStep();
-                updateChart();
+                switch (algo) {
+                    case "Bubble sort":
+                        oneStepBubbleSort();
+                        updateChart();
+                        break;
+                    case "Insertion sort":
+                        oneStepInsertionSort();
+                        updateChart();
+                        break;
+                    case "Quick sort":
+                        log("not yet implemented.");
+                        break;
+                }
             }
         });
 
         sortOnTimerBtn.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
-                runSortOnTimer();
+                switch (algo) {
+                    case "Bubble sort":
+                        sortOnTimer(algo);
+                        break;
+                    case "Insertion sort":
+                        log("not yet implemented.");
+                        break;
+                    case "Quick sort":
+                        log("not yet implemented.");
+                        break;
+                }
+
             }
         });
     }
