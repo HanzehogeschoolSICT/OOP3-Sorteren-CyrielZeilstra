@@ -1,5 +1,6 @@
 package Sorter;
 
+import com.sun.media.jfxmedia.events.PlayerStateEvent;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,26 +12,20 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Controller implements Initializable {
-    int n = 15;
+    int n = 35;
 
-    // Generate a random list and add them to the chart.
     ArrayList<Integer> nums;
     final NumberAxis yAxis = new NumberAxis();
     final CategoryAxis xAxis = new CategoryAxis();
     final BarChart<String, Number> bc = new BarChart<String, Number>(xAxis, yAxis);
     XYChart.Series<String, Number> series1 = new XYChart.Series();
-
-    public void log(String text){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        log.appendText("(" + dtf.format(now) + "): " + text + "\n");
-    }
 
     public Controller() {
         bc.setTitle("Bubble sort");
@@ -46,6 +41,12 @@ public class Controller implements Initializable {
             series1.getData().add(new XYChart.Data(a.toString(), a));
         }
         bc.getData().add(series1);
+    }
+
+    public void log(String text) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        log.appendText("(" + dtf.format(now) + "): " + text + "\n");
     }
 
     public void generateRandomNumberlist() {
@@ -73,28 +74,6 @@ public class Controller implements Initializable {
         }
     }
 
-    public void runSortOnTimer() {
-        String text = msTextField.getText();
-        if (text.matches("[0-9]+") && text.length() > 2) {
-            log("Sorting every : " + text + "ms.");
-            Timer t = new Timer();
-            t.scheduleAtFixedRate(new TimerTask(){
-                @Override
-                public void run(){
-                    Platform.runLater(new Runnable(){
-                        public void run(){
-                            oneBubbleStep();
-                            updateChart();
-                        }
-                    });
-
-                }
-            }, 1000, Integer.parseInt(msTextField.getText()));
-        } else {
-            log("Please input a number higher than or equal to 100.");
-        }
-    }
-
     private void updateChart() {
         XYChart.Series<String, Number> seriesA = new XYChart.Series();
         for (int i = 0; i < nums.size(); i++) {
@@ -105,6 +84,41 @@ public class Controller implements Initializable {
         bc.layout();
         bc.getData().add(seriesA);
         log("Chart has been updated.");
+    }
+
+    public boolean isSorted() {
+        for (int i = 0; i < nums.size() - 1; i++) {
+            if (nums.get(i) > nums.get(i + 1)) {
+                return false; // It is proven that the array is not sorted.
+            }
+        }
+        return true; // If this part has been reached, the array must be sorted.
+    }
+
+    public void runSortOnTimer() {
+        String text = msTextField.getText();
+        if (text.matches("[0-9]+") && text.length() > 2) {
+            log("Sorting every : " + text + "ms.");
+            Timer t = new Timer();
+            t.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(new Runnable() {
+                        public void run() {
+                            oneBubbleStep();
+                            updateChart();
+                            if (isSorted()){
+                                log("List is sorted. Stopping loop.");
+                                t.cancel();
+                            }
+                        }
+                    });
+                }
+            }, 1000, Integer.parseInt(msTextField.getText()));
+        } else {
+            log("Please input a number higher than or equal to 100.");
+        }
+
     }
 
     @FXML //  fx:id="mainVBox"
