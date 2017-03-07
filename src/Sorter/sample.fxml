@@ -25,6 +25,7 @@
             <Button fx:id="sortOnTimerBtn" mnemonicParsing="false" text="Sort On Timer" />
             <TextField fx:id="msTextField" minWidth="0.0" prefHeight="25.0" prefWidth="299.0" text="100" />
             <Label text="ms" />
+            <Button fx:id="newListBtn" mnemonicParsing="false" text="New List" />
         </buttons>
          <effect>
             <Reflection>

@@ -77,19 +77,20 @@ public class Controller implements Initializable {
         bc.layout();
         bc.getData().add(seriesA);
     }
+
+    int p;
+
     private void oneStepInsertionSort() {
-        int j;            // the number of items sorted so far
-        int key;                // the item to be inserted
+        int key;
         int i;
 
-        for (j = 1; j < nums.size(); j++)    // Start with 1 (not 0)
-        {
-            key = nums.get(j);
-            for (i = j - 1; (i >= 0) && (nums.get(i) > key); i--)   // Smaller values are moving up
-            {
+        for (; p < nums.size(); p++) {
+            key = nums.get(p);
+            for (i = p - 1; (i >= 0) && (nums.get(i) > key); i--) {
                 nums.set(i + 1, nums.get(i));
             }
-            nums.set(i + 1, key);    // Put the key in its proper location
+            nums.set(i + 1, key);
+            p++;
             break;
         }
     }
@@ -105,7 +106,6 @@ public class Controller implements Initializable {
         }
     }
 
-
     public boolean isSorted() {
         for (int i = 0; i < nums.size() - 1; i++) {
             if (nums.get(i) > nums.get(i + 1)) {
@@ -115,7 +115,48 @@ public class Controller implements Initializable {
         return true;
     }
 
-    public void sortOnTimer(String alg) {
+    public void oneStepQuickSort() {
+        quicksort(0, nums.size() - 1);
+    }
+
+    boolean run;
+
+    private void quicksort(int low, int high) {
+        int i = low, j = high;
+        // Get the pivot element from the middle of the list
+        int pivot = nums.get(low + (high - low) / 2);
+
+        // Divide into two lists
+        while (i <= j) {
+            while (nums.get(i) < pivot) {
+                i++;
+            }
+            while (nums.get(j) > pivot) {
+                j--;
+            }
+
+            if (i <= j) {
+                exchange(i, j);
+                i++;
+                j--;
+            }
+
+        }
+        // Recursion
+
+        if (low < j)
+            quicksort(low, j);
+        if (i < high)
+            quicksort(i, high);
+    }
+
+    private void exchange(int i, int j) {
+        int temp = nums.get(i);
+        nums.set(i, nums.get(j));
+        nums.set(j, temp);
+    }
+
+    public void sortOnTimer() {
         String text = msTextField.getText();
         if (text.matches("[0-9]+") && text.length() > 2) {
             log("Sorting every : " + text + "ms.");
@@ -125,16 +166,18 @@ public class Controller implements Initializable {
                 public void run() {
                     Platform.runLater(new Runnable() {
                         public void run() {
-                            switch (alg) {
+                            switch (algo) {
                                 case "Bubble sort":
                                     oneStepBubbleSort();
                                     updateChart();
                                     break;
                                 case "Insertion sort":
-                                    log("not yet implemented.");
+                                    oneStepInsertionSort();
+                                    updateChart();
                                     break;
                                 case "Quick sort":
-                                    log("not yet implemented.");
+                                    oneStepQuickSort();
+                                    updateChart();
                                     break;
                             }
                             if (isSorted()) {
@@ -168,6 +211,9 @@ public class Controller implements Initializable {
     @FXML
     private javafx.scene.control.Button stepBtn; // Value injected by FXMLLoader
 
+    @FXML
+    private javafx.scene.control.Button newListBtn; // Value injected by FXMLLoader
+
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         assert mainVBox != null : "fx:id=\"mainVBox\" was not injected: check your FXML file 'Sorter.fxml'.";
@@ -176,15 +222,11 @@ public class Controller implements Initializable {
         assert msTextField != null : "fx:id=\"msTextField\" was not injected: check your FXML file 'Sorter.fxml'.";
         assert log != null : "fx:id=\"log\" was not injected: check your FXML file 'Sorter.fxml'.";
         assert algorithmSelect != null : "fx:id=\"algorithmSelect\" was not injected: check your FXML file 'Sorter.fxml'.";
+        assert algorithmSelect != null : "fx:id=\"algorithmSelect\" was not injected: check your FXML file 'Sorter.fxml'.";
 
         mainVBox.getChildren().add(bc);
 
-        ObservableList<String> options =
-                FXCollections.observableArrayList(
-                        "Bubble sort",
-                        "Insertion sort",
-                        "Quick sort"
-                );
+        ObservableList<String> options = FXCollections.observableArrayList("Bubble sort", "Insertion sort", "Quick sort");
 
         algorithmSelect.setItems(options);
         algorithmSelect.setValue(options.get(0));
@@ -213,7 +255,8 @@ public class Controller implements Initializable {
                         updateChart();
                         break;
                     case "Quick sort":
-                        log("not yet implemented.");
+                        oneStepQuickSort();
+                        updateChart();
                         break;
                 }
             }
@@ -222,18 +265,15 @@ public class Controller implements Initializable {
         sortOnTimerBtn.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
-                switch (algo) {
-                    case "Bubble sort":
-                        sortOnTimer(algo);
-                        break;
-                    case "Insertion sort":
-                        log("not yet implemented.");
-                        break;
-                    case "Quick sort":
-                        log("not yet implemented.");
-                        break;
-                }
+                sortOnTimer();
+            }
+        });
 
+        newListBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                generateRandomNumberlist();
+                updateChart();
             }
         });
     }
