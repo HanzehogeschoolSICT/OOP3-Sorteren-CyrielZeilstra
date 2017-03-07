@@ -6,14 +6,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Blend?>
-<?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sorter.Controller">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sorter.Controller.Controller">
    <children>
       <VBox fx:id="mainVBox" prefHeight="200" prefWidth="200" spacing="5.0">
          <children>
@@ -27,15 +25,8 @@
             <Label text="ms" />
             <Button fx:id="newListBtn" mnemonicParsing="false" text="New List" />
         </buttons>
-         <effect>
-            <Reflection>
-               <input>
-                  <Blend />
-               </input>
-            </Reflection>
-         </effect>
       </ButtonBar>
-      <TextArea fx:id="log" editable="false" prefHeight="91.0" prefWidth="265.0" GridPane.rowIndex="2" />
+      <TextArea fx:id="log" editable="false" prefHeight="95.0" prefWidth="265.0" GridPane.rowIndex="2" />
    </children>
    <columnConstraints>
       <ColumnConstraints />

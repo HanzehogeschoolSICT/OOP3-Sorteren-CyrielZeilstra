@@ -1,5 +1,6 @@
-package Sorter;
+package Sorter.Controller;
 
+import Sorter.Algorithms.Sorter;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,14 +25,15 @@ import java.util.*;
 
 public class Controller implements Initializable {
     // Amount of data in the barchart
-    int n = 35;
+    int n = 100;
 
-    ArrayList<Integer> nums;
+    public static ArrayList<Integer> nums;
     final NumberAxis yAxis = new NumberAxis();
     final CategoryAxis xAxis = new CategoryAxis();
     final BarChart<String, Number> bc = new BarChart<String, Number>(xAxis, yAxis);
     XYChart.Series<String, Number> series1 = new XYChart.Series();
     String algo;
+    Sorter sortObject = new Sorter();
 
     public Controller() {
         bc.setTitle("Algorithm : " + algo);
@@ -67,45 +69,6 @@ public class Controller implements Initializable {
         this.nums = nums;
     }
 
-    private void updateChart() {
-        XYChart.Series<String, Number> seriesA = new XYChart.Series();
-        for (int i = 0; i < nums.size(); i++) {
-            seriesA.getData().add(new XYChart.Data(nums.get(i).toString(), nums.get(i)));
-        }
-        seriesA.setName("Random data");
-        bc.getData().clear();
-        bc.layout();
-        bc.getData().add(seriesA);
-    }
-
-    int p;
-
-    private void oneStepInsertionSort() {
-        int key;
-        int i;
-
-        for (; p < nums.size(); p++) {
-            key = nums.get(p);
-            for (i = p - 1; (i >= 0) && (nums.get(i) > key); i--) {
-                nums.set(i + 1, nums.get(i));
-            }
-            nums.set(i + 1, key);
-            p++;
-            break;
-        }
-    }
-
-    private void oneStepBubbleSort() {
-        int temp = 0;
-        for (int j = 1; j < (nums.size()); j++) {
-            if (nums.get(j - 1) > nums.get(j)) {
-                temp = nums.get(j - 1);
-                nums.set(j - 1, nums.get(j));
-                nums.set(j, temp);
-            }
-        }
-    }
-
     public boolean isSorted() {
         for (int i = 0; i < nums.size() - 1; i++) {
             if (nums.get(i) > nums.get(i + 1)) {
@@ -115,45 +78,15 @@ public class Controller implements Initializable {
         return true;
     }
 
-    public void oneStepQuickSort() {
-        quicksort(0, nums.size() - 1);
-    }
-
-    boolean run;
-
-    private void quicksort(int low, int high) {
-        int i = low, j = high;
-        // Get the pivot element from the middle of the list
-        int pivot = nums.get(low + (high - low) / 2);
-
-        // Divide into two lists
-        while (i <= j) {
-            while (nums.get(i) < pivot) {
-                i++;
-            }
-            while (nums.get(j) > pivot) {
-                j--;
-            }
-
-            if (i <= j) {
-                exchange(i, j);
-                i++;
-                j--;
-            }
-
+    private void updateChart() {
+        XYChart.Series<String, Number> seriesA = new XYChart.Series();
+        for (int i = 0; i < nums.size(); i++) {
+            seriesA.getData().add(new XYChart.Data(nums.get(i).toString(), nums.get(i)));
         }
-        // Recursion
-
-        if (low < j)
-            quicksort(low, j);
-        if (i < high)
-            quicksort(i, high);
-    }
-
-    private void exchange(int i, int j) {
-        int temp = nums.get(i);
-        nums.set(i, nums.get(j));
-        nums.set(j, temp);
+        seriesA.setName("Random data");
+        bc.getData().clear();
+        bc.layout();
+        bc.getData().add(seriesA);
     }
 
     public void sortOnTimer() {
@@ -168,15 +101,15 @@ public class Controller implements Initializable {
                         public void run() {
                             switch (algo) {
                                 case "Bubble sort":
-                                    oneStepBubbleSort();
+                                    nums = sortObject.oneStepBubbleSort(nums);
                                     updateChart();
                                     break;
                                 case "Insertion sort":
-                                    oneStepInsertionSort();
+                                    nums = sortObject.oneStepInsertionSort(nums);
                                     updateChart();
                                     break;
                                 case "Quick sort":
-                                    oneStepQuickSort();
+                                    nums = sortObject.oneStepQuickSort(nums);
                                     updateChart();
                                     break;
                             }
@@ -247,15 +180,15 @@ public class Controller implements Initializable {
             public void handle(javafx.event.ActionEvent event) {
                 switch (algo) {
                     case "Bubble sort":
-                        oneStepBubbleSort();
+                        nums = sortObject.oneStepBubbleSort(nums);
                         updateChart();
                         break;
                     case "Insertion sort":
-                        oneStepInsertionSort();
+                        nums = sortObject.oneStepInsertionSort(nums);
                         updateChart();
                         break;
                     case "Quick sort":
-                        oneStepQuickSort();
+                        nums = sortObject.oneStepQuickSort(nums);
                         updateChart();
                         break;
                 }
