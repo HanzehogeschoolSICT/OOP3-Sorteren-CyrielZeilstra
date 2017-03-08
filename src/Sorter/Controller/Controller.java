@@ -1,6 +1,8 @@
 package Sorter.Controller;
 
-import Sorter.Algorithms.Sorter;
+import Sorter.Algorithms.BubbleSort;
+import Sorter.Algorithms.InsertionSort;
+import Sorter.Algorithms.Quicksort;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,15 +27,15 @@ import java.util.*;
 
 public class Controller implements Initializable {
     // Amount of data in the barchart
-    int n = 100;
+    int n = 20;
 
     public static ArrayList<Integer> nums;
     final NumberAxis yAxis = new NumberAxis();
     final CategoryAxis xAxis = new CategoryAxis();
     final BarChart<String, Number> bc = new BarChart<String, Number>(xAxis, yAxis);
     XYChart.Series<String, Number> series1 = new XYChart.Series();
+
     String algo;
-    Sorter sortObject = new Sorter();
 
     public Controller() {
         bc.setTitle("Algorithm : " + algo);
@@ -52,12 +54,6 @@ public class Controller implements Initializable {
         bc.getData().add(series1);
     }
 
-    public void log(String text) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        log.appendText("(" + dtf.format(now) + "): " + text + "\n");
-    }
-
     public void generateRandomNumberlist() {
         ArrayList<Integer> nums = new ArrayList<>();
         int i = 1;
@@ -69,15 +65,6 @@ public class Controller implements Initializable {
         this.nums = nums;
     }
 
-    public boolean isSorted() {
-        for (int i = 0; i < nums.size() - 1; i++) {
-            if (nums.get(i) > nums.get(i + 1)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     private void updateChart() {
         XYChart.Series<String, Number> seriesA = new XYChart.Series();
         for (int i = 0; i < nums.size(); i++) {
@@ -87,6 +74,21 @@ public class Controller implements Initializable {
         bc.getData().clear();
         bc.layout();
         bc.getData().add(seriesA);
+    }
+
+    public void log(String text) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        log.appendText("(" + dtf.format(now) + "): " + text + "\n");
+    }
+
+    public boolean isSorted() {
+        for (int i = 0; i < nums.size() - 1; i++) {
+            if (nums.get(i) > nums.get(i + 1)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void sortOnTimer() {
@@ -101,15 +103,15 @@ public class Controller implements Initializable {
                         public void run() {
                             switch (algo) {
                                 case "Bubble sort":
-                                    nums = sortObject.oneStepBubbleSort(nums);
+                                    nums = new BubbleSort().oneStepBubbleSort(nums);
                                     updateChart();
                                     break;
                                 case "Insertion sort":
-                                    nums = sortObject.oneStepInsertionSort(nums);
+                                    nums = new InsertionSort().oneStepInsertionSort(nums);
                                     updateChart();
                                     break;
                                 case "Quick sort":
-                                    nums = sortObject.oneStepQuickSort(nums);
+                                    nums = new Quicksort().oneStepQuickSort(nums);
                                     updateChart();
                                     break;
                             }
@@ -142,6 +144,9 @@ public class Controller implements Initializable {
     private TextField msTextField; // Value injected by FXMLLoader
 
     @FXML
+    private TextField amountOfDataTextField; // Value injected by FXMLLoader
+
+    @FXML
     private javafx.scene.control.Button stepBtn; // Value injected by FXMLLoader
 
     @FXML
@@ -155,7 +160,7 @@ public class Controller implements Initializable {
         assert msTextField != null : "fx:id=\"msTextField\" was not injected: check your FXML file 'Sorter.fxml'.";
         assert log != null : "fx:id=\"log\" was not injected: check your FXML file 'Sorter.fxml'.";
         assert algorithmSelect != null : "fx:id=\"algorithmSelect\" was not injected: check your FXML file 'Sorter.fxml'.";
-        assert algorithmSelect != null : "fx:id=\"algorithmSelect\" was not injected: check your FXML file 'Sorter.fxml'.";
+
 
         mainVBox.getChildren().add(bc);
 
@@ -180,15 +185,15 @@ public class Controller implements Initializable {
             public void handle(javafx.event.ActionEvent event) {
                 switch (algo) {
                     case "Bubble sort":
-                        nums = sortObject.oneStepBubbleSort(nums);
+                        nums = new BubbleSort().oneStepBubbleSort(nums);
                         updateChart();
                         break;
                     case "Insertion sort":
-                        nums = sortObject.oneStepInsertionSort(nums);
+                        nums = new InsertionSort().oneStepInsertionSort(nums);
                         updateChart();
                         break;
                     case "Quick sort":
-                        nums = sortObject.oneStepQuickSort(nums);
+                        nums = new Quicksort().oneStepQuickSort(nums);
                         updateChart();
                         break;
                 }
@@ -205,6 +210,10 @@ public class Controller implements Initializable {
         newListBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                String text = amountOfDataTextField.getText();
+                if (text.matches("[0-9]+")) {
+                    n = Integer.parseInt(text);
+                }
                 generateRandomNumberlist();
                 updateChart();
             }

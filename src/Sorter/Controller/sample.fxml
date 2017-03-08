@@ -23,16 +23,23 @@
             <Button fx:id="sortOnTimerBtn" mnemonicParsing="false" text="Sort On Timer" />
             <TextField fx:id="msTextField" minWidth="0.0" prefHeight="25.0" prefWidth="299.0" text="100" />
             <Label text="ms" />
-            <Button fx:id="newListBtn" mnemonicParsing="false" text="New List" />
         </buttons>
       </ButtonBar>
-      <TextArea fx:id="log" editable="false" prefHeight="95.0" prefWidth="265.0" GridPane.rowIndex="2" />
+      <TextArea fx:id="log" editable="false"  prefWidth="265.0" GridPane.rowIndex="3" />
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="2">
+        <buttons>
+            <Button fx:id="newListBtn" mnemonicParsing="false" text="New List" />
+            <Label text="Amount of data: " />
+            <TextField fx:id="amountOfDataTextField" text="20" />
+        </buttons>
+      </ButtonBar>
    </children>
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints />
+      <RowConstraints valignment="CENTER" />
       <RowConstraints valignment="CENTER" />
       <RowConstraints valignment="CENTER" />
    </rowConstraints>
