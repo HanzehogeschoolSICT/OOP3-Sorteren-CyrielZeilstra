@@ -9,6 +9,11 @@ public class Quicksort {
 
     ArrayList<Integer> tempNums;
 
+    public void resetVars(){
+        i = 0;
+        j = 0;
+    }
+
     public ArrayList<Integer> oneStepQuickSort(ArrayList<Integer> nums) {
         tempNums = nums;
         return quickSort(0, tempNums.size() - 1);

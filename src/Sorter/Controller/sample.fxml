@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ComboBox?>
@@ -12,13 +13,13 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sorter.Controller.Controller">
+<GridPane alignment="center" vgap="10" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sorter.Controller.Controller">
    <children>
-      <VBox fx:id="mainVBox" prefHeight="200" prefWidth="200" spacing="5.0" GridPane.rowSpan="2">
+      <VBox fx:id="mainVBox" spacing="5.0">
          <children>
             <HBox alignment="CENTER">
                <children>
-                  <Label maxWidth="70.0" prefHeight="16.0" prefWidth="70.0" text="Algorithm:" />
+                  <Label text="Algorithm:" />
                   <ComboBox fx:id="algorithmSelect" />
                </children>
             </HBox>
@@ -26,38 +27,47 @@
              </HBox>
             <HBox alignment="CENTER">
                <children>
-                  <ButtonBar maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0">
+                  <ButtonBar>
                     <buttons>
                       <Button fx:id="stepBtn" mnemonicParsing="false" text="Step" />
-                        <Button fx:id="sortOnTimerBtn" minWidth="70.0" mnemonicParsing="false" text="Sort On Timer" />
-                        <TextField fx:id="msTextField" minWidth="0.0" prefHeight="25.0" prefWidth="299.0" text="100" />
-                        <Label text="ms" />
+                        <Button fx:id="sortOnTimerBtn" mnemonicParsing="false" text="Sort On Timer" />
+                        <TextField fx:id="msTextField" alignment="TOP_LEFT" text="100" />
+                        <Label alignment="TOP_LEFT" text="ms" />
                     </buttons>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
                   </ButtonBar>
                </children>
             </HBox>
             <HBox alignment="CENTER">
                <children>
-                  <ButtonBar prefHeight="40.0">
+                  <ButtonBar>
                     <buttons>
-                        <Button fx:id="newListBtn" minWidth="44.0" mnemonicParsing="false" prefHeight="26.0" text="New List" />
-                        <Label minWidth="78.0" prefHeight="16.0" text="Amount of data:" />
-                        <TextField fx:id="amountOfDataTextField" minWidth="53.0" prefHeight="26.0" text="20" />
+                        <Button fx:id="newListBtn" mnemonicParsing="false" text="New List" />
+                        <Label text="Amount of data:" />
+                        <TextField fx:id="amountOfDataTextField" text="20" />
                     </buttons>
                   </ButtonBar>
                </children>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </HBox>
-            <TextArea fx:id="log" editable="false" prefHeight="80" prefWidth="265.0" />
+            <HBox alignment="CENTER">
+               <children>
+                  <TextArea fx:id="log" editable="false" maxHeight="100" />
+               </children>
+            </HBox>
          </children></VBox>
    </children>
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints />
-      <RowConstraints />
-      <RowConstraints />
-      <RowConstraints />
       <RowConstraints />
    </rowConstraints>
 </GridPane>

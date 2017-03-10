@@ -9,6 +9,10 @@ public class InsertionSort {
     ArrayList<Integer> tempNums;
     static int p = 0;
 
+    public void resetVars(){
+        p = 0;
+    }
+
     public ArrayList<Integer> oneStepInsertionSort(ArrayList<Integer> nums) {
 
         int key;

@@ -42,7 +42,7 @@ public class Controller implements Initializable {
         bc.setCategoryGap(0);
         bc.setBarGap(0);
         bc.setAnimated(false);
-        bc.setMinSize(550, 350);
+        bc.setMinSize(550, 200);
         bc.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
         series1.setName("Random data");
 
@@ -62,6 +62,8 @@ public class Controller implements Initializable {
             i++;
         }
         Collections.shuffle(nums);
+        new InsertionSort().resetVars();
+        new Quicksort().resetVars();
         this.nums = nums;
     }
 
@@ -91,6 +93,23 @@ public class Controller implements Initializable {
         return true;
     }
 
+    public void doStep(String algo){
+        switch (algo) {
+            case "Bubble sort":
+                nums = new BubbleSort().oneStepBubbleSort(nums);
+                updateChart();
+                break;
+            case "Insertion sort":
+                nums = new InsertionSort().oneStepInsertionSort(nums);
+                updateChart();
+                break;
+            case "Quick sort":
+                nums = new Quicksort().oneStepQuickSort(nums);
+                updateChart();
+                break;
+        }
+    }
+
     public void sortOnTimer() {
         String text = msTextField.getText();
         if (text.matches("[0-9]+")) {
@@ -102,20 +121,7 @@ public class Controller implements Initializable {
                 public void run() {
                     Platform.runLater(new Runnable() {
                         public void run() {
-                            switch (algo) {
-                                case "Bubble sort":
-                                    nums = new BubbleSort().oneStepBubbleSort(nums);
-                                    updateChart();
-                                    break;
-                                case "Insertion sort":
-                                    nums = new InsertionSort().oneStepInsertionSort(nums);
-                                    updateChart();
-                                    break;
-                                case "Quick sort":
-                                    nums = new Quicksort().oneStepQuickSort(nums);
-                                    updateChart();
-                                    break;
-                            }
+                            doStep(algo);
                             if (isSorted()) {
                                 log("List is sorted. Stopping loop.");
                                 t.cancel();
@@ -158,14 +164,6 @@ public class Controller implements Initializable {
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        assert mainVBox != null : "fx:id=\"mainVBox\" was not injected: check your FXML file 'Sorter.fxml'.";
-        assert sortOnTimerBtn != null : "fx:id=\"sortOnTimerBtn\" was not injected: check your FXML file 'Sorter.fxml'.";
-        assert stepBtn != null : "fx:id=\"stepBtn\" was not injected: check your FXML file 'Sorter.fxml'.";
-        assert msTextField != null : "fx:id=\"msTextField\" was not injected: check your FXML file 'Sorter.fxml'.";
-        assert log != null : "fx:id=\"log\" was not injected: check your FXML file 'Sorter.fxml'.";
-        assert algorithmSelect != null : "fx:id=\"algorithmSelect\" was not injected: check your FXML file 'Sorter.fxml'.";
-
-
         barBox.getChildren().add(bc);
 
         ObservableList<String> options = FXCollections.observableArrayList("Bubble sort", "Insertion sort", "Quick sort");
@@ -187,20 +185,7 @@ public class Controller implements Initializable {
         stepBtn.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
-                switch (algo) {
-                    case "Bubble sort":
-                        nums = new BubbleSort().oneStepBubbleSort(nums);
-                        updateChart();
-                        break;
-                    case "Insertion sort":
-                        nums = new InsertionSort().oneStepInsertionSort(nums);
-                        updateChart();
-                        break;
-                    case "Quick sort":
-                        nums = new Quicksort().oneStepQuickSort(nums);
-                        updateChart();
-                        break;
-                }
+                doStep(algo);
             }
         });
 
