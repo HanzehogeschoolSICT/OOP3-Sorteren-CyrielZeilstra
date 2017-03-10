@@ -93,7 +93,8 @@ public class Controller implements Initializable {
 
     public void sortOnTimer() {
         String text = msTextField.getText();
-        if (text.matches("[0-9]+") && text.length() > 2) {
+        if (text.matches("[0-9]+")) {
+            if (Integer.parseInt(text) >= 10 && Integer.parseInt(text) <= 100)
             log("Sorting every : " + text + "ms.");
             Timer t = new Timer();
             t.scheduleAtFixedRate(new TimerTask() {
@@ -124,7 +125,7 @@ public class Controller implements Initializable {
                 }
             }, 1000, Integer.parseInt(msTextField.getText()));
         } else {
-            log("Please input a number higher than or equal to 100.");
+            log("Please input a number between 10 and 100.");
         }
     }
 
@@ -150,6 +151,9 @@ public class Controller implements Initializable {
     private javafx.scene.control.Button stepBtn; // Value injected by FXMLLoader
 
     @FXML
+    private HBox barBox; // Value injected by FXMLLoader
+
+    @FXML
     private javafx.scene.control.Button newListBtn; // Value injected by FXMLLoader
 
     @Override // This method is called by the FXMLLoader when initialization is complete
@@ -162,7 +166,7 @@ public class Controller implements Initializable {
         assert algorithmSelect != null : "fx:id=\"algorithmSelect\" was not injected: check your FXML file 'Sorter.fxml'.";
 
 
-        mainVBox.getChildren().add(bc);
+        barBox.getChildren().add(bc);
 
         ObservableList<String> options = FXCollections.observableArrayList("Bubble sort", "Insertion sort", "Quick sort");
 

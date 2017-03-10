@@ -8,39 +8,56 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sorter.Controller.Controller">
    <children>
-      <VBox fx:id="mainVBox" prefHeight="200" prefWidth="200" spacing="5.0">
+      <VBox fx:id="mainVBox" prefHeight="200" prefWidth="200" spacing="5.0" GridPane.rowSpan="2">
          <children>
-            <ComboBox fx:id="algorithmSelect" prefWidth="150.0" />
+            <HBox alignment="CENTER">
+               <children>
+                  <Label maxWidth="70.0" prefHeight="16.0" prefWidth="70.0" text="Algorithm:" />
+                  <ComboBox fx:id="algorithmSelect" />
+               </children>
+            </HBox>
+             <HBox fx:id="barBox">
+             </HBox>
+            <HBox alignment="CENTER">
+               <children>
+                  <ButtonBar maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0">
+                    <buttons>
+                      <Button fx:id="stepBtn" mnemonicParsing="false" text="Step" />
+                        <Button fx:id="sortOnTimerBtn" minWidth="70.0" mnemonicParsing="false" text="Sort On Timer" />
+                        <TextField fx:id="msTextField" minWidth="0.0" prefHeight="25.0" prefWidth="299.0" text="100" />
+                        <Label text="ms" />
+                    </buttons>
+                  </ButtonBar>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER">
+               <children>
+                  <ButtonBar prefHeight="40.0">
+                    <buttons>
+                        <Button fx:id="newListBtn" minWidth="44.0" mnemonicParsing="false" prefHeight="26.0" text="New List" />
+                        <Label minWidth="78.0" prefHeight="16.0" text="Amount of data:" />
+                        <TextField fx:id="amountOfDataTextField" minWidth="53.0" prefHeight="26.0" text="20" />
+                    </buttons>
+                  </ButtonBar>
+               </children>
+            </HBox>
+            <TextArea fx:id="log" editable="false" prefHeight="80" prefWidth="265.0" />
          </children></VBox>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="1">
-        <buttons>
-          <Button fx:id="stepBtn" mnemonicParsing="false" text="Step" />
-            <Button fx:id="sortOnTimerBtn" mnemonicParsing="false" text="Sort On Timer" />
-            <TextField fx:id="msTextField" minWidth="0.0" prefHeight="25.0" prefWidth="299.0" text="100" />
-            <Label text="ms" />
-        </buttons>
-      </ButtonBar>
-      <TextArea fx:id="log" editable="false"  prefWidth="265.0" GridPane.rowIndex="3" />
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="2">
-        <buttons>
-            <Button fx:id="newListBtn" mnemonicParsing="false" text="New List" />
-            <Label text="Amount of data: " />
-            <TextField fx:id="amountOfDataTextField" text="20" />
-        </buttons>
-      </ButtonBar>
    </children>
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints />
-      <RowConstraints valignment="CENTER" />
-      <RowConstraints valignment="CENTER" />
-      <RowConstraints valignment="CENTER" />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
    </rowConstraints>
 </GridPane>
